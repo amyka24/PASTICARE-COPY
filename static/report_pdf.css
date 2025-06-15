@@ -1,0 +1,124 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+    background: white;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+.pdf-report-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 16px;
+}
+
+/* Title */
+.report-title {
+    text-align: center;
+    font-family: Cambria, serif;
+    font-size: 28px;
+    color: #4a783a;
+    margin-bottom: 30px;
+}
+
+/* Student Info Box */
+.student-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 2px solid #91CD5E;
+    border-radius: 12px;
+    background-color: #f9fff8;
+    gap: 20px;
+}
+
+.student-info .profile-pic {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+}
+
+.student-info .details {
+    flex-grow: 1;
+}
+
+.student-info p {
+    margin: 5px 0;
+}
+
+/* Progress Table */
+.progress-section h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-family: Cambria, serif;
+    color: #333;
+}
+
+.progress-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.progress-table th, .progress-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.progress-table th {
+    background-color: #cce6b8;
+    color: #333;
+    font-weight: bold;
+}
+
+.progress-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Footer */
+.footer-note {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 13px;
+    color: #777;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+/* Print-safe styles */
+@media print {
+    body {
+        background: white;
+        margin: 0;
+        padding: 0;
+        font-size: 13px;
+    }
+
+    .pdf-report-container {
+        box-shadow: none;
+        padding: 0;
+        border: none;
+        margin: 0 auto;
+    }
+
+    .progress-table th {
+        background-color: #cce6b8; /* Light green fallback for print */
+        color: #000;
+    }
+
+    .footer-note {
+        color: #444;
+    }
+
+    img.profile-pic {
+        border-color: #999;
+    }
+}

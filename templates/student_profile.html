@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stuprofile.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='stuprofile.js') }}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="/edit_profile">Edit Profile</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="student-profile-container">
+            <a href="{{ url_for('teacher_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+
+            <div class="grid-container">
+                <!-- Left Side: Profile Info -->
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <div class="profile-picture">
+                            {% if student.profile_picture %}
+                                <img src="{{ url_for('static', filename='uploads/' + student.profile_picture) }}" alt="Profile Picture">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='default-avatar.png') }}" alt="Default Profile Picture">
+                            {% endif %}
+                        </div>
+                        <a href="{{ url_for('edit_student', student_id=student.id) }}">
+                            <button class="edit-btn">✏️ Edit</button>
+                        </a>
+                    </div>
+
+                    <h2>{{ student.name }}</h2>
+                    <p><strong>Student Code:</strong> {{ student.student_code }}</p>
+
+                    <h3>👩‍🎓 Personal Information</h3>
+                    <ul>
+                        <li>🎂 <strong>Date of Birth:</strong> {{ student.date_of_birth }}</li>
+                        <li>👨‍👩‍👧 <strong>Parent’s Name:</strong> {{ student.parent_name }}</li>
+                        <li>📞 <strong>Phone Number:</strong> {{ student.phone_number }}</li>
+                        <li>✉️ <strong>Email:</strong> {{ student.email }}</li>
+                        <li>📍 <strong>Address:</strong> {{ student.address }}</li>
+                        <li>🌟 <strong>Ambition:</strong> {{ student.ambition }}</li>
+                        <li>🚫 <strong>Allergies:</strong> {{ student.allergies }}</li>
+                    </ul>
+                </div>
+
+                <!-- Right Side: Performance Info -->
+                <div class="performance-section">
+                    <h3>📊 Performance Overview</h3>
+
+                    <div class="progress-summary">
+    <h3>Progress Summary 📈</h3>
+    <canvas id="progressChart" height="300"></canvas>
+</div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

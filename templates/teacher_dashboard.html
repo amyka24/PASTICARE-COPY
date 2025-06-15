@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="classroom-section">
+            <h2>Class 4 Adnin</h2>
+            <div class="controls">
+                <button id="list-view" class="view">List View</button>
+                <button id="delete" class="danger">&#128465; Delete</button>
+                <a href="{{ url_for('show_register_student_form') }}"><button class="primary">+ Register New</button></a>
+            </div>
+            <p id="delete-message" class="hidden">Please select student(s) to delete</p>
+
+            <div class="student-grid" id="card-view">
+                {% for student in students %}
+                <a href="{{ url_for('student_profile', student_id=student.id) }}" class="student-card-link">
+                    <div class="student-card" data-id="{{ student.id }}">
+                        <div class="avatar">
+                            {% if student.profile_picture %}
+                                <img src="{{ url_for('static', filename='uploads/' + student.profile_picture) }}" alt="Profile Picture">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='default-avatar.png') }}" alt="Profile Picture">
+                            {% endif %}
+                        </div>
+                        <p>{{ student.nickname }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+                    <!-- List View -->
+    <table id="list-view" class="hidden">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Student Name</th>
+                <th>Student Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ student.nickname }}</td>
+                <td>{{ student.student_code }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+            <div class="confirm-container">
+                <button id="confirm-delete" class="danger hidden">Confirm</button>
+        </section>
+    </main>
+</body>
+</html>

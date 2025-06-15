@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='parent_dashboard.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</head>
+<body>
+    <header>
+      <div class="header-container">
+        <h1>PASTI-CARE</h1>
+        <div class="profile-menu">
+          <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+          <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+          <div class="dropdown-content" id="profileDropdown">
+            <a href="/edit_profile">Edit Profile</a>
+            <a href="/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/parent_dashboard">Dashboard</a></li>
+          <li><a href="/parent_progress">Progress Report</a></li>
+          <li><a href="/parent_wall">Class Wall</a></li>
+          <li><a href="/parent_calendar">Event Timeline</a></li>
+        </ul>
+      </nav>
+    </header>
+  
+    <section class="welcome-banner">
+      <h2>Welcome, {{ student.nickname }}'s Parents!</h2>
+      <p>Here you'll see updates, photos, and announcements from school.</p>
+    </section>
+  
+    <main class="dashboard-grid">
+      <!-- LEFT SIDE -->
+      <section class="student-profile-card">
+        <img src="{{ url_for('static', filename='uploads/' + (student.profile_picture if student.profile_picture else 'default_profile.jpg')) }}" alt="Student Photo">
+        <table>
+          <tr><td><strong>Full Name</strong></td><td>{{ student.name }}</td></tr>
+          <tr><td><strong>Nickname</strong></td><td>{{ student.nickname }}</td></tr>
+          <tr><td><strong>Date of Birth</strong></td><td>{{ student.date_of_birth }}</td></tr>
+          <tr><td><strong>Student Code</strong></td><td>{{ student.student_code }}</td></tr>
+          <tr><td><strong>Address</strong></td><td>{{ student.address }}</td></tr>
+          <tr><td><strong>Allergies</strong></td><td>{{ student.allergies }}</td></tr>
+          <tr><td><strong>Ambition</strong></td><td>{{ student.ambition }}</td></tr>
+        </table>
+      </section>
+  
+      <!-- RIGHT SIDE -->
+      <aside class="dashboard-side-panel">
+         <a href="{{ url_for('edit_student_parent', student_id=student.id) }}" class="side-btn">✏️ Edit Student Profile</a>
+  
+        <div class="event-box">
+            <h3>📅 Upcoming Event</h3>
+            {% if upcoming_event %}
+              <p><strong>{{ upcoming_event.title }}</strong></p>
+              <p>📆 {{ upcoming_event.date.strftime('%A, %d %B %Y') }}</p>
+              <p>{{ upcoming_event.description }}</p>
+            {% else %}
+              <p>No upcoming events. Stay tuned! 🎉</p>
+            {% endif %}
+          </div>
+          
+        <div class="highlight-box">
+  <h3>🌟 This Week's Highlight</h3>
+  {% if highlight %}
+    <div class="highlight-content">
+      <p class="highlight-title">👏 Great News for {{ student.nickname }}!</p>
+      <p class="highlight-text">🎉 {{ student.nickname }} has achieved: <strong>{{ highlight }}</strong></p>
+      <p class="highlight-note">Keep cheering for your child’s amazing progress this week! 💖</p>
+    </div>
+  {% else %}
+    <p>No special highlights yet — check back soon!</p>
+  {% endif %}
+</div>
+
+
+      </aside>
+    </main>
+  </body>  
+</html>

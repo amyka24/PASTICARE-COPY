@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='calendar.css') }}">
+  <script defer src="{{ url_for('static', filename='calendar.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <h1>PASTI-CARE</h1>
+      <div class="profile-menu">
+        <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+        <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+        <div class="dropdown-content" id="profileDropdown">
+          <a href="/edit_profile">Edit Profile</a>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/parent_dashboard">Dashboard</a></li>
+        <li><a href="/parent_progress">Progress Report</a></li>
+        <li><a href="/parent_wall">Class Wall</a></li>
+        <li><a href="/parent_calendar">Event Timeline</a></li>
+      </ul>
+    </nav>
+  </header>
+<main>
+   <!-- Intro Box for Parents -->
+  <div class="intro-box">
+  <h2>📅 Welcome to Your Event Calendar</h2>
+  <p>Here you can see all upcoming activities, field trips, and special days planned for your child’s class. Use the tabs to switch between <strong>Month</strong> and <strong>Year</strong> views. Stay informed and never miss a moment! 💖</p>
+</div>
+
+  <section class="calendar-container">
+
+   
+    <!-- Calendar Header -->
+    <div class="calendar-header">
+      <h2>Event Calendar</h2>
+      <div class="calendar-controls">
+        <div class="view-options">
+          <a href="{{ url_for('calendar_parent', filter='month') }}" 
+             class="view-option {% if filter == 'month' %}active{% endif %}">
+            Month
+          </a>
+          <a href="{{ url_for('calendar_parent', filter='year') }}" 
+             class="view-option {% if filter == 'year' %}active{% endif %}">
+            Year
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% for event in events %}
+    <div class="event-card">
+      <div class="event-date">
+        <div class="day">{{ event.date.day }}</div>
+        <div class="month">{{ event.date.strftime('%b') }}</div>
+      </div>
+      <div class="event-details">
+        <strong>{{ event.title }}</strong><br>
+        <div class="event-description">
+          {{ event.description.replace('\n', '<br>')|safe }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    {% if not events %}
+    <div class="empty-calendar">
+      <h3>No events scheduled</h3>
+      <p>Stay tuned for upcoming activities and announcements.</p>
+    </div>
+    {% endif %}
+  </section>
+</main>
+
+  
+</body>
+</html>

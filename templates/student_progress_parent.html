@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='parentprogress.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <header>
+      <div class="header-container">
+        <h1>PASTI-CARE</h1>
+        <div class="profile-menu">
+          <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+          <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+          <div class="dropdown-content" id="profileDropdown">
+            <a href="/edit_profile">Edit Profile</a>
+            <a href="/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/parent_dashboard">Dashboard</a></li>
+          <li><a href="/parent_progress" class="active">Progress Report</a></li>
+          <li><a href="/parent_wall">Class Wall</a></li>
+          <li><a href="/parent_calendar">Event Timeline</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+  <div class="parent-progress-container">
+    <div class="progress-header">
+      <h2>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+        </svg>
+        Your Child's Progress
+      </h2>
+      <div class="child-selector">
+        <label for="status-filter">Filter:</label>
+        <select id="status-filter">
+          <option value="All">All</option>
+          <option value="Excellent">Excellent</option>
+          <option value="Good">Good</option>
+          <option value="Weak">Needs Work</option>
+        </select>
+      </div>
+    </div>
+
+    {% if progress %}
+    <div class="progress-summary">
+      {% set excellent = progress|selectattr('status', 'equalto', 'Excellent')|list|length %}
+      {% set good = progress|selectattr('status', 'equalto', 'Good')|list|length %}
+      {% set weak = progress|selectattr('status', 'equalto', 'Weak')|list|length %}
+      {% set total = progress|length %}
+
+      <div class="summary-card">
+        <div class="summary-value">{{ total }}</div>
+        <div class="summary-label">Total Milestones</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-value excellent">{{ excellent }}</div>
+<div class="summary-bar">
+  <div class="fill" data-width="{{ (excellent/total*100) | round(0) }}"></div>
+</div>
+        <div class="summary-label">Excellent</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-value good">{{ good }}</div>
+        <div class="summary-bar">
+  <div class="fill" data-width="{{ (good/total*100) | round(0) }}"></div>
+
+</div>
+        <div class="summary-label">Good</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-value weak">{{ weak }}</div>
+        <div class="summary-bar">
+  <div class="fill" data-width="{{ (weak/total*100) | round(0) }}"></div>
+</div>
+        <div class="summary-label">Needs Work</div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="progress-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Subcategory</th>
+            <th>Milestone</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in progress %}
+          <tr>
+            <td data-label="Category">{{ item.category }}</td>
+            <td data-label="Subcategory">{{ item.subcategory }}</td>
+            <td data-label="Milestone">{{ item.milestone }}</td>
+            <td data-label="Status">
+              <span class="status-badge 
+                {% if item.status == 'Excellent' %}status-excellent
+                {% elif item.status == 'Good' %}status-good
+                {% elif item.status == 'Weak' %}status-weak
+                {% endif %}" 
+                title="{% if item.status == 'Weak' %}Needs improvement — please help your child practice more.{% elif item.status == 'Good' %}Doing well, keep supporting!{% else %}Great job!{% endif %}">
+                {{ item.status }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+      </svg>
+      <p>No progress data available yet.</p>
+      <a href="/contact_teacher" class="contact-button">Contact Teacher</a>
+    </div>
+    {% endif %}
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Set widths dynamically
+    document.querySelectorAll('.fill').forEach(el => {
+      const pct = el.dataset.width;
+      el.style.width = pct + '%';
+    });
+
+    // Filter
+    document.getElementById('status-filter').addEventListener('change', function() {
+      const value = this.value;
+      document.querySelectorAll('.progress-table tbody tr').forEach(row => {
+        const status = row.querySelector('.status-badge').textContent.trim();
+        if (value === "All" || status === value || (value === "Needs Work" && status === "Weak")) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    });
+
+   
+    
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,819 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+}
+
+/* Main Container */
+/* Main Report Section */
+.report-main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+}
+
+.report-title {
+    font-size: 32px;
+    color: #4a783a;
+    font-family: Cambria, serif;
+    margin-bottom: 10px;
+}
+
+.report-subtitle {
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #777;
+}
+
+/* Card Layout */
+.report-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.report-card {
+    background-color: #f9fff8;
+    border: 2px solid #91CD5E;
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+    position: relative;
+}
+
+.report-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.report-card input[type="radio"] {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    transform: scale(1.4);
+}
+
+.report-card h3 {
+    margin: 10px 0 5px;
+    font-size: 18px;
+    color: #333;
+}
+
+.report-card p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Student Dropdown */
+.student-select-box {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.student-select-box label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+#studentSelect {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Button */
+.generate-btn-container {
+    margin-top: 20px;
+}
+
+.generate-btn-container button {
+    padding: 12px 30px;
+    background-color: #91CD5E;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.generate-btn-container button:hover {
+    background-color: #7cc957;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .report-card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.report-card.selected {
+    background-color: #e4ffe4;
+    border-color: #4a783a;
+}
+
+/*individual*/
+.individual-report-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.individual-report-container h2 {
+    color: #4a783a;
+    font-family: Cambria, serif;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Student Info */
+.student-info-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f9fff8;
+    border: 2px solid #91CD5E;
+    border-radius: 12px;
+}
+
+.student-info-box img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.student-info-box ul {
+    list-style: none;
+    padding: 0;
+    font-size: 15px;
+}
+
+.student-info-box li {
+    margin-bottom: 6px;
+}
+
+/* Progress Table */
+.progress-section {
+    margin-top: 30px;
+}
+
+.progress-section h3 {
+    font-size: 20px;
+    color: #333;
+    font-family: Cambria, serif;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.progress-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.progress-table th, .progress-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.progress-table th {
+    background-color: #91CD5E;
+    color: white;
+}
+
+.progress-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Status badge */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    display: inline-block;
+}
+
+.status-excellent {
+    background-color: #28a745;
+}
+
+.status-good {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-weak {
+    background-color: #dc3545;
+}
+
+/* Report Actions */
+.report-actions {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.btn-back,
+.btn-download {
+    display: inline-block;
+    padding: 10px 22px;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn-back {
+    background-color: white;
+    border: 2px solid #4a783a;
+    color: #4a783a;
+}
+
+.btn-back:hover {
+    background-color: #f1f9f1;
+}
+
+.btn-download {
+    background-color: #91CD5E;
+    color: white;
+    border: none;
+}
+
+.btn-download:hover {
+    background-color: #7cc957;
+}
+
+/* Print mode */
+@media print {
+    header, nav, .btn-back, .btn-download {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .individual-report-container {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        border: none;
+        max-width: 100%;
+    }
+
+    .progress-section h3 {
+        margin-top: 20px;
+    }
+
+    .status-badge {
+        font-size: 11px;
+    }
+}
+
+/* Main Class Report Container */
+.class-report-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.class-report-container h1 {
+    font-family: Cambria, serif;
+    font-size: 28px;
+    color: #4a783a;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.class-report-container p {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Per Student Block */
+.student-section {
+    margin-bottom: 40px;
+    border-top: 2px dashed #ddd;
+    padding-top: 20px;
+}
+
+.student-section h3 {
+    font-size: 20px;
+    font-family: Cambria, serif;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.student-section p {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* Progress Table */
+.progress-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.progress-table th, .progress-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.progress-table th {
+    background-color: #91CD5E;
+    color: white;
+}
+
+.progress-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Buttons */
+.report-actions {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.btn-download {
+    padding: 12px 30px;
+    background-color: #91CD5E;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-download:hover {
+    background-color: #7cc957;
+}
+
+/* Page Break for Printing */
+.page-break {
+    page-break-after: always;
+}
+
+/* Print Styles */
+@media print {
+    header, nav, .btn-download {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+        font-size: 13px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .class-report-container {
+        box-shadow: none;
+        padding: 0;
+        border: none;
+    }
+
+    .progress-table th {
+        background-color: #cce6b8;
+        color: black;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+}
+
+.top-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Student Info */
+.student-details {
+    list-style: none;
+    padding: 0;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.student-details li {
+    margin-bottom: 4px;
+}
+
+/* Status Badge */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    display: inline-block;
+}
+
+.status-excellent {
+    background-color: #28a745;
+}
+
+.status-good {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.status-weak {
+    background-color: #dc3545;
+}
+
+
+/* Summary Container */
+.summary-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Title */
+.summary-container h2 {
+    font-family: Cambria, serif;
+    font-size: 28px;
+    color: #4a783a;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Category Dropdown */
+label[for="categorySelect"] {
+    font-weight: bold;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#categorySelect {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 30px;
+}
+
+/* Print Buttons */
+.print-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.print-controls button {
+    padding: 10px 20px;
+    background-color: #91CD5E;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.print-controls button:hover {
+    background-color: #7cc957;
+}
+
+/* Subcategory Titles */
+#chartArea h3 {
+    font-family: Cambria, serif;
+    font-size: 20px;
+    margin-top: 40px;
+    color: #333;
+}
+
+/* Progress Bar */
+.progress-wrapper {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.progress-label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #444;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 16px;
+    background-color: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #91CD5E;
+    border-radius: 10px 0 0 10px;
+    transition: width 0.4s ease-in-out;
+}
+
+/* Chart.js Canvas */
+canvas {
+    margin-bottom: 10px;
+}
+
+/* Print Styles */
+@media print {
+    header, nav, .print-controls, #categorySelect {
+        display: none !important;
+    }
+
+    .summary-container {
+        box-shadow: none;
+        padding: 0;
+        border: none;
+        margin: 0 auto;
+    }
+
+    canvas {
+        page-break-inside: avoid;
+    }
+
+    h2, h3 {
+        page-break-after: avoid;
+    }
+}
+
+/* Controls Bar */
+.summary-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Chart Section Placeholder */
+.empty-message {
+    font-size: 16px;
+    color: #999;
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* Animate Chart Reveal */
+#chartArea > h3,
+#chartArea > canvas,
+#chartArea > .progress-wrapper {
+    animation: fadeInUp 0.4s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Divider Between Subcategories */
+#chartArea > h3:not(:first-of-type) {
+    border-top: 1px dashed #ccc;
+    padding-top: 20px;
+    margin-top: 30px;
+}
+
+/* Timeline Container */
+.timeline-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Title */
+.timeline-container h2 {
+    text-align: center;
+    color: #4a783a;
+    font-family: Cambria, serif;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+/* Category Section */
+.category-card {
+    border: 2px solid #cde6bd;
+    background-color: #f9fff8;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.category-card h3 {
+    font-family: Cambria, serif;
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* Subcategory Section */
+.subcategory {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.subcategory h4 {
+    font-size: 16px;
+    color: #4a783a;
+    margin-bottom: 10px;
+}
+
+/* Milestone Item */
+.milestone {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin-top: 8px;
+    border-radius: 12px;
+    background-color: #f5f9f4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease;
+}
+
+.milestone:hover {
+    transform: translateY(-2px);
+}
+
+/* Milestone Info */
+.milestone-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.milestone-info strong {
+    font-size: 15px;
+    color: #333;
+}
+
+.target-period {
+    font-size: 13px;
+    color: #777;
+    margin-top: 3px;
+}
+
+/* Status Tag Styles */
+.status-tag {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    min-width: 100px;
+}
+
+/* Status Colors */
+.Assessed {
+    background-color: #28a745;
+}
+
+.Overdue {
+    background-color: #dc3545;
+}
+
+.Upcoming {
+    background-color: #f1c40f;
+    color: #000;
+}
+
+.Unspecified {
+    background-color: #6c757d;
+}
+
+/* Print Styles */
+@media print {
+    header, nav {
+        display: none !important;
+    }
+
+    .timeline-container {
+        box-shadow: none;
+        padding: 0;
+        border: none;
+        margin: 0 auto;
+    }
+
+    .milestone {
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+.timeline-filters {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.filter-btn {
+    margin: 5px;
+    padding: 8px 16px;
+    border: 2px solid #91CD5E;
+    background-color: white;
+    color: #4a783a;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: #eaf6e3;
+}
+
+.filter-btn.active {
+    background-color: #91CD5E;
+    color: white;
+}
+
+/* Summary Stats Bar */
+.summary-stats {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #4a783a;
+}
+
+/* Insight Card Consistency */
+.report-card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.report-card-grid .insight-card {
+    width: 260px;
+    min-height: 240px;
+    background-color: #f9fff8;
+    border: 2px solid #91CD5E;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #333;
+    text-align: center;
+}

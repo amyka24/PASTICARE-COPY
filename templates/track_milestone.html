@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='trackprogress.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='trackprogress.js') }}"></script>
+
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+   <main>
+     <div class="progress-container">
+        <h2>Student Progress Tracking</h2>
+        
+        <!-- Batch Actions -->
+        <div class="batch-actions">
+            <button type="button" onclick="applyToAll('Weak')">Mark All as Weak</button>
+            <button type="button" onclick="applyToAll('Good')">Mark All as Good</button>
+            <button type="button" onclick="applyToAll('Excellent')">Mark All as Excellent</button>
+        </div>
+        
+        <!-- Progress Table -->
+        <form method="POST">
+            <table class="progress-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Progress Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr class="{% if progress_map.get(student.id) %}has-progress{% endif %}">
+                        <td>
+                            <span class="status-indicator 
+                                {% if progress_map.get(student.id) == 'Weak' %}status-weak
+                                {% elif progress_map.get(student.id) == 'Good' %}status-good
+                                {% elif progress_map.get(student.id) == 'Excellent' %}status-excellent
+                                {% endif %}">
+                            </span>
+                            {{ student.name }}
+                        </td>
+                        <td>
+                            <div class="progress-radios">
+                                <label class="radio-label weak">
+                                    <input type="radio" name="status_{{ student.id }}" value="Weak" 
+                                           {% if progress_map.get(student.id) == 'Weak' %}checked{% endif %}>
+                                    <span class="radio-visual"></span>
+                                    <span class="status-text">Weak</span>
+                                </label>
+                                
+                                <label class="radio-label good">
+                                    <input type="radio" name="status_{{ student.id }}" value="Good" 
+                                           {% if progress_map.get(student.id) == 'Good' %}checked{% endif %}>
+                                    <span class="radio-visual"></span>
+                                    <span class="status-text">Good</span>
+                                </label>
+                                
+                                <label class="radio-label excellent">
+                                    <input type="radio" name="status_{{ student.id }}" value="Excellent" 
+                                           {% if progress_map.get(student.id) == 'Excellent' %}checked{% endif %}>
+                                    <span class="radio-visual"></span>
+                                    <span class="status-text">Excellent</span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div style="text-align: center; margin-top: 25px;">
+                <button type="submit" style="padding: 10px 25px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Save All Progress
+                </button>
+                
+            </div>
+            <div style="text-align: center; margin-top: 15px;">
+    <a href="{{ url_for('track_progress') }}" class="back-button">Back to Progress Overview</a>
+</div>
+        </form>
+    </div>
+    </main>
+</body>
+</html>

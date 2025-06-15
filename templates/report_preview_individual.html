@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+     <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}"> 
+    <script defer src="{{ url_for('static', filename='report.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="individual-report-container">
+        <h2>Student Report: {{ student.name }}</h2>
+
+        <!-- Student Info -->
+        <div class="student-info-box">
+            <img src="{{ url_for('static', filename='uploads/' + (student.profile_picture if student.profile_picture else 'default_profile.jpg')) }}" alt="Profile Photo">
+            <ul>
+                <li><strong>Full Name:</strong> {{ student.name }}</li>
+                <li><strong>Nickname:</strong> {{ student.nickname or '-' }}</li>
+                <li><strong>Date of Birth:</strong> {{ student.date_of_birth.strftime('%d %b %Y') }}</li>
+                <li><strong>Parent:</strong> {{ student.parent_name }}</li>
+            </ul>
+        </div>
+
+        <!-- Progress Table -->
+        <div class="progress-section">
+            <h3>Milestone Progress</h3>
+            {% if progress %}
+            <table class="progress-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Subcategory</th>
+                        <th>Milestone</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sp, milestone, subcat, cat in progress %}
+                    <tr>
+                        <td>{{ cat.name }}</td>
+                        <td>{{ subcat.name }}</td>
+                        <td>{{ milestone.description }}</td>
+                        <td>
+                            <span class="status-badge 
+                                {% if sp.status == 'Excellent' %}status-excellent
+                                {% elif sp.status == 'Good' %}status-good
+                                {% elif sp.status == 'Weak' %}status-weak
+                                {% endif %}">
+                                {{ sp.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No progress records available for this student.</p>
+            {% endif %}
+        </div>
+
+        <!-- Action -->
+        <div class="report-actions">
+    <a href="{{ url_for('generate_report') }}" class="btn-back">← Back</a>
+    <button onclick="window.print()" class="btn-download">Print or Save as PDF</button>
+</div>
+
+    </div>
+        </main>
+</body>
+</html>

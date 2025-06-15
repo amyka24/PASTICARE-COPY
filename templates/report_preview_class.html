@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+     <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}"> 
+    <script defer src="{{ url_for('static', filename='report.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+    <div class="class-report-container">
+        <div class="report-actions top-actions">
+            <a href="{{ url_for('generate_report') }}" class="btn-back">← Back</a>
+            <button onclick="window.print()" class="btn-download">Print or Save as PDF</button>
+        </div>
+
+        <h1>Class Progress Report</h1>
+        <p>Generated on {{ now().strftime('%d %B %Y') }}</p>
+
+        {% for student, progress_list in all_progress.items() %}
+        <div class="student-section page-break">
+            <h3>{{ student.name }}</h3>
+            <ul class="student-details">
+                <li><strong>Nickname:</strong> {{ student.nickname or '-' }}</li>
+                <li><strong>Date of Birth:</strong> {{ student.date_of_birth.strftime('%d %B %Y') }}</li>
+                <li><strong>Parent:</strong> {{ student.parent_name }}</li>
+            </ul>
+
+            {% if progress_list %}
+            <table class="progress-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Subcategory</th>
+                        <th>Milestone</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sp, milestone, subcat, cat in progress_list %}
+                    <tr>
+                        <td>{{ cat.name }}</td>
+                        <td>{{ subcat.name }}</td>
+                        <td>{{ milestone.description }}</td>
+                        <td>
+                            <span class="status-badge 
+                                {% if sp.status == 'Excellent' %}status-excellent
+                                {% elif sp.status == 'Good' %}status-good
+                                {% elif sp.status == 'Weak' %}status-weak
+                                {% endif %}">
+                                {{ sp.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No progress data available.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+</body>
+</html>

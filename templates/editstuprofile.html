@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student Profile - PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="/edit_profile">Edit Profile</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="register-section">
+            <div class="form-container">
+                <h1>Edit Student Profile</h1>
+                <form action="{{ url_for('update_student', student_id=student.id) }}" method="POST" enctype="multipart/form-data">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="{{ student.name }}" required>
+
+                    <label for="nickname">Nickname</label>
+                    <input type="text" id="nickname" name="nickname" value="{{ student.nickname or '' }}">
+
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth }}" required min="2021-01-01" max="2021-12-31">
+
+
+                    <label for="parent_name">Parent’s Name</label>
+                    <input type="text" id="parent_name" name="parent_name" value="{{ student.parent_name }}" required>
+
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" value="{{ student.phone_number }}" required>
+                    <span id="phoneError" class="error-message"></span>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ student.email }}" required>
+                    <span id="emailError" class="error-message"></span>
+
+                    <label for="profile_picture">Profile Picture</label>
+                    <input type="file" id="profile_picture" name="profile_picture">
+                    {% if student.profile_picture %}
+                        <p>Current: {{ student.profile_picture }}</p>
+                    {% endif %}
+
+                    <!-- New fields -->
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address">{{ student.address or '' }}</textarea>
+
+                    <label for="allergies">Allergies</label>
+                    <textarea id="allergies" name="allergies">{{ student.allergies or '' }}</textarea>
+
+                    <label for="ambition">Ambition</label>
+                    <input type="text" id="ambition" name="ambition" value="{{ student.ambition or '' }}">
+
+                    <div class="form-buttons">
+                        <button type="button" class="back-button" onclick="history.back()">Back</button>
+                        <button type="submit" class="save-button">Update</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

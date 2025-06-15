@@ -1,0 +1,177 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f9fdf9;
+  }
+  
+  .dashboard-main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px 20px;
+  }
+  
+  .welcome-card, .milestone-card, .quote-card {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+  }
+  
+  /* Welcome Banner */
+  .welcome-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #a0e9e0, #d0f4c5);
+    padding: 30px 15px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    color: #2f855a;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  .welcome-banner h2 {
+    font-size: 2rem;
+    color: #2f855a;
+    margin-bottom: 10px;
+  }
+  
+  .welcome-banner p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  /* Grid Layout */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    padding: 0 40px 40px;
+  }
+  
+  /* Left Section */
+  .student-profile-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  .student-profile-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #38a169;
+    margin-bottom: 20px;
+  }
+  
+  .student-profile-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .student-profile-card td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 1rem;
+  }
+  
+  .student-profile-card td:first-child {
+    font-weight: bold;
+    color: #2f855a;
+    width: 40%;
+  }
+  
+  /* Right Side */
+  .dashboard-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .side-btn {
+    background-color: #38a169;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .side-btn:hover {
+    background-color: #2f855a;
+  }
+  
+  .event-box, .quote-box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .event-box h3,
+  .quote-box h3 {
+    margin-bottom: 10px;
+    color: #2f855a;
+    font-size: 1.1rem;
+  }
+  
+  .quote-box blockquote {
+    font-style: italic;
+    font-size: 1rem;
+    color: #444;
+    border-left: 4px solid #38a169;
+    padding-left: 15px;
+  }
+  
+ .highlight-box {
+  background: #f9fefb;
+  border-left: 6px solid #91CD5E;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  margin-top: 20px;
+}
+
+.highlight-box h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #4a783a;
+  font-size: 20px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.highlight-content {
+  background: #ffffff;
+  border: 1px dashed #91CD5E;
+  padding: 15px 20px;
+  border-radius: 10px;
+}
+
+.highlight-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #4a783a;
+  margin-bottom: 8px;
+}
+
+.highlight-text {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.highlight-text strong {
+  color: #5fa75a;
+}
+
+.highlight-note {
+  font-size: 14px;
+  color: #555;
+}

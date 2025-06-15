@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='trackprogress.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='trackprogress.js') }}"></script>
+
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+   <main> 
+<main>
+    <!-- Success Message -->
+    {% if request.args.get('success') %}
+    <div class="alert alert-success">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        Progress updated successfully!
+    </div>
+    {% endif %}
+
+    <div class="progress-dashboard">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                <path d="M7 12h2v5H7zm4-7h2v12h-2zm4 4h2v8h-2z"/>
+            </svg> Track Progress</h1>
+            <div class="search-box">
+                <input type="text" id="milestoneSearch" placeholder="Search milestones...">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Progress Selection Flow -->
+        <div class="selection-flow">
+            <!-- Category Selection -->
+            <div class="selection-card active">
+                <div class="step-number">1</div>
+                <h3>Select Category</h3>
+                <select id="categorySelect" class="styled-select" onchange="filterSubcategories()">
+                    <option value="">-- Choose a Category --</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="category-icons">
+                    {% for cat in categories %}
+                    <div class="category-icon" data-category="{{ cat.id }}" onclick="document.getElementById('categorySelect').value='{{ cat.id }}'; filterSubcategories()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+                        </svg>
+                        <span>{{ cat.name }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Subcategory Selection -->
+            <div class="selection-card" id="subcategorySection">
+                <div class="step-number">2</div>
+                <h3>Select Subcategory</h3>
+                <select id="subcategorySelect" class="styled-select" onchange="showMilestones()">
+                    <option value="">-- Choose a Subcategory --</option>
+                    {% for sub in subcategories %}
+                        <option value="{{ sub.id }}" data-category="{{ sub.category_id }}">{{ sub.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="subcategory-pills" id="subcategoryPills">
+                    <!-- Dynamically filled by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Milestone List -->
+            <div class="selection-card" id="milestoneListCard">
+                <div class="step-number">3</div>
+                <h3>Select Milestone</h3>
+                <div class="milestone-cards" id="milestoneList">
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                        </svg>
+                        <p>Please select a subcategory to view milestones</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

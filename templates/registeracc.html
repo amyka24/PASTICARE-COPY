@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}"> 
+    <script>
+        function toggleStudentCode() {
+            var role = document.getElementById("role").value;
+            var studentCodeField = document.getElementById("student_code_field");
+            if (role === "parent") {
+                studentCodeField.style.display = "block";
+            } else {
+                studentCodeField.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="register-box">
+            <h2>Register Account</h2>
+            <form action="{{ url_for('register_user') }}" method="POST" onsubmit="validateForm(event)">
+                <div class="input-group">
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                </div>
+                <div class="input-group">
+                    <select id="role" name="role" required onchange="toggleStudentCode()">
+                        <option value="teacher">Teacher</option>
+                        <option value="parent">Parent</option>
+                    </select>
+                </div>
+                <div id="student_code_field" class="input-group" style="display: none;">
+                    <input type="text" id="student_code" name="student_code" placeholder="Enter your child's student code" required>
+                </div>
+
+                <!-- Place just inside your .register-box -->
+{% if message %}
+  <div class="error-message" style="margin-bottom: 15px; padding: 10px; border: 1px solid #f5c2c7; background-color: #f8d7da; color: #842029; border-radius: 5px;">
+    {{ message }}
+  </div>
+{% endif %}
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </div>
+    </div>
+
+   <script>
+  // Toggle student code input
+  function toggleStudentCode() {
+    const role = document.getElementById("role").value;
+    const studentCodeField = document.getElementById("student_code_field");
+    studentCodeField.style.display = (role === "parent") ? "block" : "none";
+  }
+
+  // Password match validation
+  function validateForm(e) {
+    const pw = document.getElementById("password").value;
+    const cpw = document.getElementById("confirm_password").value;
+    const errorBox = document.querySelector(".error-message");
+
+    // Clear previous error (if any)
+    if (errorBox) {
+      errorBox.style.display = "none";
+    }
+
+    if (pw !== cpw) {
+      e.preventDefault();
+      // If backend Jinja error box exists, reuse it:
+      if (errorBox) {
+        errorBox.textContent = "❌ Passwords do not match.";
+        errorBox.style.display = "block";
+      } else {
+        // If not, just alert fallback
+        alert("Passwords do not match.");
+      }
+    }
+  }
+</script>
+</body>
+</html>

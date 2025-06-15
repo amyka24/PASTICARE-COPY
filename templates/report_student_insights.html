@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+     <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}"> 
+    <script defer src="{{ url_for('static', filename='report.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+      <main class="report-main">
+        <div class="top-actions">
+            <a href="{{ url_for('generate_report') }}" class="btn-back">← Back </a>
+            <div id="insight-summary" class="summary-stats">Loading insight summary...</div>
+        </div>
+
+        <h2 class="report-title">📊 Student Progress Insights</h2>
+        <p class="report-subtitle">A snapshot of each student's progress to help you prioritize support and praise.</p>
+
+        <!-- Filter Buttons -->
+        <div class="timeline-filters">
+            <button class="filter-btn active" data-filter="All">All</button>
+            <button class="filter-btn" data-filter="Doing Well">Doing Well</button>
+            <button class="filter-btn" data-filter="Needs Attention">Needs Attention</button>
+        </div>
+
+        <!-- Student Cards -->
+        <div class="report-card-grid" id="insightGrid">
+            {% for item in insights %}
+            <a href="{{ url_for('generate_individual_report', student_id=item.student.id) }}" style="text-decoration: none;">
+                <div class="report-card insight-card"
+                    data-label="{{ item.label }}">
+                    <h3>{{ item.student.name }}</h3>
+                    <p>🟢 Excellent: {{ item.excellent }}</p>
+                    <p>🟡 Good: {{ item.good }}</p>
+                    <p>🔴 Weak: {{ item.weak }}</p>
+                    <p>📌 Total Assessed: {{ item.total }}</p>
+                    <span class="status-badge
+                        {% if item.label == 'Doing Well' %}status-excellent
+                        {% elif item.label == 'Moderate' %}status-good
+                        {% elif item.label == 'Needs Attention' %}status-weak
+                        {% else %}status-weak{% endif %}">
+                        {{ item.label }}
+                    </span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </main>
+
+     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const filterButtons = document.querySelectorAll(".filter-btn");
+            const cards = document.querySelectorAll(".insight-card");
+            const summary = document.getElementById("insight-summary");
+
+            function updateSummary() {
+                let counts = {
+                    "Doing Well": 0,
+                    "Needs Attention": 0
+                };
+                cards.forEach(card => {
+                    const label = card.getAttribute("data-label");
+                    if (counts[label] !== undefined) counts[label]++;
+                });
+                summary.textContent = `Total: ${cards.length} | ✅ Doing Well: ${counts["Doing Well"]} | ⚠️ Needs Attention: ${counts["Needs Attention"]}`;
+            }
+
+            filterButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    filterButtons.forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+
+                    const selected = btn.getAttribute("data-filter");
+
+                    cards.forEach(card => {
+                        const label = card.getAttribute("data-label");
+                        card.style.display = (selected === "All" || label === selected) ? "flex" : "none";
+                    });
+                });
+            });
+
+            updateSummary();
+        });
+    </script>
+
+</body>
+</html>

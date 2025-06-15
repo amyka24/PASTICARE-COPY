@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Progress Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='report_pdf.css') }}">
+</head>
+<body>
+<main>
+    <div class="class-report-container">
+        <h1 style="text-align: center;">Class Progress Report</h1>
+        <p style="text-align: center;">Generated on {{ now().strftime('%d %B %Y') }}</p>
+
+        {% for student, progress_list in all_progress.items() %}
+        <div class="student-section page-break">
+            <h2>{{ student.name }}</h2>
+            <p><strong>Parent:</strong> {{ student.parent_name }}</p>
+            <p><strong>Date of Birth:</strong> {{ student.date_of_birth.strftime('%d %B %Y') }}</p>
+
+            {% if progress_list %}
+            <table class="progress-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Subcategory</th>
+                        <th>Milestone</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sp, milestone, subcat, cat in progress_list %}
+                    <tr>
+                        <td>{{ cat.name }}</td>
+                        <td>{{ subcat.name }}</td>
+                        <td>{{ milestone.description }}</td>
+                        <td>{{ sp.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No progress data available.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</main>
+</body>
+</html>

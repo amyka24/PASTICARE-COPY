@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+     <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}"> 
+    <script defer src="{{ url_for('static', filename='report.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+    <div class="summary-container">
+        <!-- Top Controls -->
+        <div class="summary-controls">
+            <a href="{{ url_for('generate_report') }}" class="btn-back">← Back</a>
+            <div class="print-controls">
+                <button onclick="window.print()">🖨️ Print Current View</button>
+                <button onclick="printAllCategories()">🖨️ Print All Categories</button>
+            </div>
+        </div>
+
+        <h2>Class Summary Report</h2>
+
+        <!-- Category Selector -->
+        <label for="categorySelect">Select Category:</label>
+        <select id="categorySelect" onchange="loadSummaryCharts()">
+            <option value="">-- Choose Category --</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Chart Container -->
+        <div id="chartArea" class="chart-area-placeholder">
+            <p class="empty-message">Please select a category to view milestone summary charts.</p>
+        </div>
+    </div>
+</main>
+
+
+            <!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+function loadSummaryCharts() {
+    const categoryId = document.getElementById("categorySelect").value;
+    const chartArea = document.getElementById("chartArea");
+    chartArea.innerHTML = '';
+
+    if (!categoryId) return;
+
+    fetch(`/generate_report/summary/data/${categoryId}`)
+        .then(res => res.json())
+        .then(data => {
+            data.forEach((subcategory, index) => {
+                // Subcategory Title
+                const title = document.createElement('h3');
+                title.innerText = subcategory.subcategory;
+                chartArea.appendChild(title);
+
+                // Chart Canvas
+                const canvas = document.createElement('canvas');
+                canvas.id = `chart_${index}`;
+                canvas.style.marginBottom = '20px';
+                chartArea.appendChild(canvas);
+
+                // Chart Data
+                const labels = subcategory.milestones.map(m => m.milestone);
+                const weak = subcategory.milestones.map(m => m.counts.Weak || 0);
+                const good = subcategory.milestones.map(m => m.counts.Good || 0);
+                const excellent = subcategory.milestones.map(m => m.counts.Excellent || 0);
+
+                // Stacked Bar Chart
+                new Chart(canvas, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: 'Weak', data: weak, backgroundColor: '#e74c3c' },
+                            { label: 'Good', data: good, backgroundColor: '#f1c40f' },
+                            { label: 'Excellent', data: excellent, backgroundColor: '#2ecc71' }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `Milestone Progress for ${subcategory.subcategory}`
+                            },
+                            legend: { position: 'bottom' }
+                        },
+                        scales: {
+                            x: { stacked: true },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                max: Math.max(...weak.concat(good, excellent)) + 1
+                            }
+                        }
+                    }
+                });
+
+                // Progress Bar Summary
+                const total = subcategory.total_milestones || 0;
+                const assessed = subcategory.assessed_count || 0;
+                const percent = total > 0 ? Math.round((assessed / total) * 100) : 0;
+
+                const progressWrapper = document.createElement('div');
+                progressWrapper.classList.add('progress-wrapper');
+
+                progressWrapper.innerHTML = `
+                    <div class="progress-label">
+                        Milestone Coverage: ${assessed}/${total} (${percent}%)
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percent}%;"></div>
+                    </div>
+                `;
+
+                chartArea.appendChild(progressWrapper);
+            });
+        });
+}
+
+</script>
+
+</body>
+</html>

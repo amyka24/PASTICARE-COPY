@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='classwall.css') }}">
+  <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='classwall.js') }}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <h1>PASTI-CARE</h1>
+      <div class="profile-menu">
+        <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+        <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+        <div class="dropdown-content" id="profileDropdown">
+          <a href="/edit_profile">Edit Profile</a>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/parent_dashboard">Dashboard</a></li>
+        <li><a href="/parent_progress">Progress Report</a></li>
+        <li><a href="/parent_wall">Class Wall</a></li>
+        <li><a href="/parent_calendar">Event Timeline</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Introductory Text -->
+    <section class="intro-box">
+      <h2>Welcome to the Class Wall 🧑‍🏫</h2>
+      <p>This space is used by teachers to post important class updates, reminders, and photos. Feel free to interact by leaving comments or asking questions related to the post. Let’s stay connected for your child’s progress and activities!</p>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Section Title -->
+    <h3 class="section-heading">📌 Teacher's Updates</h3>
+
+    {% if posts %}
+      {% for post in posts %}
+      <div class="post-card">
+        <!-- Post Header -->
+        <div class="post-header">
+          <div class="user-info">
+            <img class="user-img" src="{{ url_for('static', filename='uploads/' + (post.user.profile_picture if post.user.profile_picture else 'default_profile.jpg')) }}">
+            <div>
+              <p class="name">{{ post.user.name or post.user.username }} <span class="role-label">Teacher</span></p>
+              <small>{{ post.timestamp.strftime('%d %b %Y, %I:%M %p') }}</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post Content -->
+        <p>{{ post.content.replace('\n', '<br>') | safe }}</p>
+
+        {% if post.image %}
+        <img src="{{ url_for('static', filename='uploads/' + post.image) }}">
+        {% endif %}
+
+        <!-- Comment Section -->
+        <div class="comment-section">
+          <form action="{{ url_for('add_comment', post_id=post.id) }}" method="POST">
+            <input type="text" name="comment_content" placeholder="Write a comment..." required>
+            <button type="submit" class="comment-submit-btn">Comment</button>
+          </form>
+
+          {% for comment in post.comments %}
+          <div class="comment">
+            <p>
+              <strong>{{ comment.user.name or comment.user.username }}
+                {% if comment.user.role == 'teacher' %}
+                  <span class="role-label">Teacher</span>
+                {% endif %}
+              </strong>:
+              
+                <span class="comment-text">
+  {% set words = comment.content.split() %}
+  {% for word in words %}
+    {% if word.startswith('@') %}
+      {% set username = word[1:] %}
+      {% set mentioned_user = users | selectattr('username', 'equalto', username) | first %}
+      <span class="mention">
+        @{{ mentioned_user.name if mentioned_user else username }} ({{ username }})
+      </span>
+    {% else %}
+      {{ word }}
+    {% endif %}
+  {% endfor %}
+</span>
+            </p>
+            {% if current_user.id == comment.user_id %}
+            <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="POST" onsubmit="return confirm('Delete this comment?');">
+              <button type="submit" class="comment-delete-icon"><i class="fas fa-trash-alt"></i></button>
+            </form>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="text-align: center; color: #777; font-style: italic; margin-top: 30px;">No updates from the teacher yet. Stay tuned!</p>
+    {% endif %}
+  </main>
+</body>
+</html>

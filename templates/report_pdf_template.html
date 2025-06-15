@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Progress Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='report_pdf.css') }}">
+</head>
+<body>
+<main>
+    <div class="pdf-report-container">
+        <h1 class="report-title">Student Progress Report</h1>
+
+        <!-- Student Info -->
+        <div class="student-info">
+            <img src="{{ url_for('static', filename='uploads/' + (student.profile_picture if student.profile_picture else 'default_profile.jpg')) }}" class="profile-pic">
+            <div class="details">
+                <p><strong>Name:</strong> {{ student.name }}</p>
+                <p><strong>Nickname:</strong> {{ student.nickname or '-' }}</p>
+                <p><strong>Date of Birth:</strong> {{ student.date_of_birth.strftime('%d %B %Y') }}</p>
+                <p><strong>Parent:</strong> {{ student.parent_name }}</p>
+            </div>
+        </div>
+
+        <!-- Progress Table -->
+        <div class="progress-section">
+            <h2>Milestone Summary</h2>
+            {% if progress %}
+            <table class="progress-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Subcategory</th>
+                        <th>Milestone</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sp, milestone, subcat, cat in progress %}
+                    <tr>
+                        <td>{{ cat.name }}</td>
+                        <td>{{ subcat.name }}</td>
+                        <td>{{ milestone.description }}</td>
+                        <td>{{ sp.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No progress records available.</p>
+            {% endif %}
+        </div>
+
+        <div class="footer-note">
+            <p>Generated on {{ now().strftime('%d %B %Y') }} | PASTI-CARE System</p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

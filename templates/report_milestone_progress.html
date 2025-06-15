@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASTI-CARE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}"> 
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>PASTI-CARE</h1>
+            <div class="profile-menu">
+                <span class="greeting">Hello, {{ user.name|default('User')|title }}!</span>
+                <img src="{{ url_for('static', filename='uploads/' + (user.profile_picture if user.profile_picture else 'default_profile.jpg')) }}" class="profile-icon" alt="Profile" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="profileDropdown">
+                  <a href="/edit_profile">Edit Profile</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>            
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('teacher_dashboard') }}">Classroom</a></li>
+                <li><a href="{{ url_for('track_progress') }}">Track Progress</a></li>
+                <li><a href="{{ url_for('class_wall') }}">Class Wall</a></li>
+                <li><a href="{{ url_for('calendar') }}">Calendar</a></li>
+                <li><a href="{{ url_for('generate_report') }}">View Report</a></li>
+            </ul>
+        </nav>
+    </header>
+   <main>
+    <div class="timeline-container">
+        <a href="{{ url_for('generate_report') }}" class="btn-back">← Back</a>
+        <h2>Milestone Timeline Progress</h2>
+
+       <div class="timeline-header">
+    <div class="summary-stats" id="summaryStats">Loading summary...</div>
+    
+    <div class="timeline-filters">
+        <button class="filter-btn active" data-filter="All">All</button>
+        <button class="filter-btn" data-filter="Assessed">Assessed</button>
+        <button class="filter-btn" data-filter="Upcoming">Upcoming</button>
+        <button class="filter-btn" data-filter="Overdue">Overdue</button>
+    </div>
+</div>
+
+        {% for category in milestone_data %}
+        <div class="category-card">
+            <h3>{{ category.name }}</h3>
+
+            {% for subcat in category.subcategories %}
+            <div class="subcategory">
+                <h4>{{ subcat.name }}</h4>
+
+                {% for milestone in subcat.milestones %}
+                <div class="milestone">
+                    <div class="milestone-info">
+                        <strong>{{ milestone.description }}</strong>
+                        <div class="target-period">Target: {{ milestone.target_period }}</div>
+                    </div>
+                    <div class="status-tag {{ milestone.status|replace(' ', '') }}">{{ milestone.status }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+     
+    </main>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const milestones = document.querySelectorAll('.milestone');
+    const summaryStats = document.getElementById('summaryStats');
+    const categoryCards = document.querySelectorAll('.category-card');
+
+    // Collect stats
+    function updateSummary() {
+        const all = milestones.length;
+        let assessed = 0, upcoming = 0, overdue = 0;
+
+        milestones.forEach(m => {
+            const status = m.querySelector('.status-tag').textContent.trim();
+            if (status === "Assessed") assessed++;
+            else if (status === "Upcoming") upcoming++;
+            else if (status === "Overdue") overdue++;
+        });
+
+        summaryStats.textContent = `Total: ${all} | Assessed: ${assessed} | Overdue: ${overdue} | Upcoming: ${upcoming}`;
+
+        // Highlight category blocks with > 3 Overdue
+        categoryCards.forEach(card => {
+            const within = card.querySelectorAll('.status-tag');
+            let localOverdue = 0;
+            within.forEach(tag => {
+                if (tag.textContent.trim() === "Overdue") localOverdue++;
+            });
+            if (localOverdue >= 3) {
+                card.classList.add('overdue-heavy');
+            } else {
+                card.classList.remove('overdue-heavy');
+            }
+        });
+    }
+
+    // Filtering Logic
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const filter = button.getAttribute('data-filter');
+
+            milestones.forEach(milestone => {
+                const status = milestone.querySelector('.status-tag').textContent.trim();
+                milestone.style.display = (filter === "All" || status === filter) ? 'flex' : 'none';
+            });
+
+            updateSummary();
+        });
+    });
+
+    updateSummary(); // Initial run
+});
+</script>
+
+</body>
+</html>

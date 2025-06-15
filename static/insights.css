@@ -1,0 +1,125 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+}
+
+
+/* Container */
+.insight-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.insight-container h2 {
+    text-align: center;
+    color: #6b4226;
+    font-size: 32px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+/* Grid Layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* Individual Card */
+.insight-card {
+    background-color: #fffdfc;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+    position: relative;
+    border-left: 5px solid transparent;
+    text-decoration: none;
+    color: inherit;
+}
+
+.insight-card:hover {
+    transform: translateY(-6px);
+}
+
+/* Status-based Borders */
+.label-Well {
+    border-left-color: #81c784; /* green */
+}
+.label-Moderate {
+    border-left-color: #ffd54f; /* yellow */
+}
+.label-Attention {
+    border-left-color: #e57373; /* red */
+}
+.label-Not {
+    border-left-color: #b0bec5; /* grey */
+}
+
+/* Content Styling */
+.student-name {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 12px;
+    color: #3e2723;
+}
+
+.progress-bar-group {
+    font-size: 0.95em;
+    margin-bottom: 6px;
+    color: #5d4037;
+}
+
+.status-label {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 6px 14px;
+    border-radius: 30px;
+    color: white;
+}
+
+.label-Well .status-label {
+    background: #2ecc71;
+}
+.label-Moderate .status-label {
+    background: #f1c40f;
+}
+.label-Attention .status-label {
+    background: #e74c3c;
+}
+.label-Not .status-label {
+    background: #7f8c8d;
+}
+
+.insight-icon {
+    font-size: 34px;
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+    opacity: 0.08;
+}
+
+/* Back Button */
+.back-button {
+    display: inline-block;
+    margin-bottom: 20px;
+    background-color: #6b4226;
+    color: #fff9f1;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #8d5d3c;
+}

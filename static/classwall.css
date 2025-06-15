@@ -1,0 +1,466 @@
+/* General Layout */
+main {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+/* Post Box */
+.post-box {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Post Input */
+.post-top {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.user-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%; /* ← makes it round */
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+
+.post-input {
+  flex: 1;
+  border: none;
+  background: #f2f2f2;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 15px;
+  resize: none;
+  min-height: 60px;
+}
+
+.post-input:focus {
+  outline: none;
+  background-color: #eaeaea;
+}
+
+/* Post actions */
+.post-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.media-buttons input[type="file"] {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  background: white;
+  cursor: pointer;
+}
+
+.post-submit {
+  background: #91CD5E;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 8px 24px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.post-submit:hover {
+  background-color: #7fbf4b;
+}
+
+/* Wall Posts */
+.post-card {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+/* Post header */
+.post-card > .post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.post-header .user-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%; /* ← makes it round */
+  object-fit: cover;
+  border: 1px solid #ccc;
+
+}
+
+.post-header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info .name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+
+.user-info small {
+  font-size: 12px;
+  color: #777;
+}
+
+.role-label {
+  font-size: 12px;
+  background-color: #eef6ec;
+  color: #5fa75a;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+/* Post content */
+.post-card p {
+  margin: 12px 0;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Post image */
+.post-card img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 12px 0;
+  display: block;
+}
+
+/* Post meta (likes/comments) */
+.post-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  color: #555;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.post-meta i {
+  margin-right: 6px;
+}
+
+/* Comment Section */
+.comment-section {
+  border-top: 1px solid #eee;
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.comment-section form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.comment-section input[type="text"] {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background: #f9f9f9;
+  font-size: 14px;
+}
+
+/* Comment submit button (green) */
+.comment-submit-btn {
+  background-color: #91CD5E;
+  color: white;
+  border: none;
+  border-radius: 30px;           /* ⬅️ reduce roundness */
+  padding: 6px 16px;            /* ⬅️ more controlled size */
+  font-size: 14px;
+  font-weight: 500;
+  height: 36px;                 /* ⬅️ explicitly define height */
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.comment-submit-btn:hover {
+  background-color: #7db64c;
+}
+
+/* Delete icon for comment (icon only) */
+.comment-delete-icon {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.comment-delete-icon:hover {
+  color: #e74c3c;
+}
+/* Individual comments */
+.comment {
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.comment:first-of-type {
+  border-top: none;
+}
+
+.comment p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Comment delete icon */
+.delete-post-form {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+
+.comment form {
+  margin-left: 8px;
+}
+
+/* Dropdown fix (if needed) */
+.dropdown-content {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 8px 0;
+  position: absolute;
+  right: 10px;
+  top: 60px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.delete-icon-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delete-icon-btn:hover {
+  color: #e74c3c;
+}
+
+/*baru tambah*/
+
+/* Add to classwall.css */
+/* Auto-growing textarea */
+.post-input {
+    transition: height 0.2s;
+    overflow-y: hidden;
+}
+
+/* File upload styling */
+.media-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #555;
+    font-size: 14px;
+}
+
+.media-label i {
+    font-size: 18px;
+    color: #91CD5E;
+}
+
+.media-btn {
+    display: none;
+}
+
+.file-name {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    color: #777;
+}
+
+/* Post focus state */
+.post-box:focus-within {
+    border-color: #91CD5E;
+    box-shadow: 0 0 0 2px rgba(145, 205, 94, 0.2);
+}
+
+/* Comment focus state */
+.comment-section input[type="text"]:focus {
+    outline: none;
+    border-color: #91CD5E;
+    box-shadow: 0 0 0 2px rgba(145, 205, 94, 0.2);
+}
+
+/* Loading state */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.intro-box {
+  background: #f9fefb;
+  border-left: 6px solid #91CD5E;
+  padding: 16px 20px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.intro-box h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #5fa75a;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.section-heading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #4d4d4d;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 30px 0 20px;
+}
+
+.styled-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #888787;
+    padding: 10px 16px;
+    border-radius: 80px;
+    font-size: 13px;
+    background-color: #ffffff;
+    color: #000000;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.styled-upload-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.styled-upload-btn input[type="file"] {
+    display: none;
+}
+
+
+/* Mentions */
+.mention {
+  color: #4CAF50;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.mention {
+  font-weight: 600;
+  color: #3896d3;
+  background-color: #f0f8ff;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.mention-dropdown {
+    position: absolute;
+    background: white;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 100;
+}
+
+.mention-option {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.mention-option:hover {
+    background-color: #f5f5f5;
+}
+
+.comment-text {
+    word-break: break-word;
+}
+
+.mention-container {
+    position: relative;
+    flex: 1;
+}
+
+.empty-wall {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 16px;
+  color: #555;
+}
+
+.empty-wall h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.empty-wall p {
+  font-size: 15px;
+  color: #777;
+}
