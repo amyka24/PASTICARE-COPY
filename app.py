@@ -11,6 +11,7 @@ import pdfkit
 from flask import make_response, render_template
 import re
 from sqlalchemy import func
+from flask import flash
 
 
 app = Flask(__name__)
@@ -221,7 +222,8 @@ def register_user():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect("/login")
+    return redirect(url_for('login'))
+
 
 
 @app.route("/")

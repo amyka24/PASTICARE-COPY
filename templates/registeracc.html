@@ -47,43 +47,50 @@
     {{ message }}
   </div>
 {% endif %}
+
+
                 <button type="submit">Register</button>
             </form>
             <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
         </div>
     </div>
 
-   <script>
-  // Toggle student code input
+   <!-- ✔ toggleStudentCode now properly sets required -->
+<script>
   function toggleStudentCode() {
     const role = document.getElementById("role").value;
     const studentCodeField = document.getElementById("student_code_field");
-    studentCodeField.style.display = (role === "parent") ? "block" : "none";
+    const studentCodeInput = document.getElementById("student_code");
+
+    if (role === "parent") {
+      studentCodeField.style.display = "block";
+      studentCodeInput.setAttribute("required", "required");
+    } else {
+      studentCodeField.style.display = "none";
+      studentCodeInput.removeAttribute("required");
+    }
   }
 
-  // Password match validation
   function validateForm(e) {
     const pw = document.getElementById("password").value;
     const cpw = document.getElementById("confirm_password").value;
     const errorBox = document.querySelector(".error-message");
 
-    // Clear previous error (if any)
     if (errorBox) {
       errorBox.style.display = "none";
     }
 
     if (pw !== cpw) {
       e.preventDefault();
-      // If backend Jinja error box exists, reuse it:
       if (errorBox) {
         errorBox.textContent = "❌ Passwords do not match.";
         errorBox.style.display = "block";
       } else {
-        // If not, just alert fallback
         alert("Passwords do not match.");
       }
     }
   }
 </script>
+
 </body>
 </html>
